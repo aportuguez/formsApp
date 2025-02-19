@@ -1,0 +1,138 @@
+<h2>Reactivos: Básicos</h2>
+<hr />
+
+<div class="row">
+  <div class="col">
+    <!-- "autocomplete off" means that we will set the valdations ourselves and not the browser-->
+    <!-- to connect with our reactive form we need the formGroup directive and the name we gave it-->
+    <form [formGroup]="basicForm" (ngSubmit)="onSave()" autocomplete="off">
+      <!-- Campo de producto -->
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Producto</label>
+        <div class="col-sm-9">
+          <!-- la directiva formControlName enlaza el campo con el formControl que creamos en el componente -->
+          <input
+            type="text"
+            class="form-control"
+            formControlName="name"
+            placeholder="Nombre del producto"
+          />
+          <!-- primera opcion (LA FEA) para mostrar errores -->
+
+          <!--
+          tenemos 2 errores posibles pero solo queremos mostrar uno a la vez, usaremos ngIf y apuntamos al control para saber cual error mostrar dependiendo del mensaje
+          usamos el touched para saber si el campo fue tocado y mostrar el error
+          <span
+            *ngIf="
+              basicForm.controls['name'].getError('required') &&
+              basicForm.controls['name'].touched
+            "
+            class="form-text text-danger"
+          >
+            Es requerido
+            Este campo es requerido
+          </span>
+          <span
+            *ngIf="
+              basicForm.controls['name'].getError('minlength') &&
+              basicForm.controls['name'].touched
+            "
+            class="form-text text-danger"
+          >
+            Debe de ser de 3 letras
+            Este requiere minimo 3 letras
+          </span>
+          -->
+
+          <!-- la segunda opcion (MEJORADA) para mostrar errores -->
+
+          <!-- sera creandonos un metodo en el componente para saber si el campo tiene errores y mostrarlos  y pasamos el nombre del campo a nuestro metodo (isValidField)-->
+
+          <span *ngIf="isValidField('name')" class="form-text text-danger">
+            <!-- Es requerdo -->
+            <!-- creamos otra funcion para saber el mensaje de error que queremos mostrar y le mandamos el nombre del campo a evaluar-->
+            {{ getFieldError("name") }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Campo de producto -->
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Precio</label>
+        <div class="col-sm-9">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="price"
+            placeholder="Precio del producto"
+          />
+          <span *ngIf="isValidField('price')" class="form-text text-danger">
+            {{ getFieldError("price") }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Campo de existencias -->
+      <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Existencias</label>
+        <div class="col-sm-9">
+          <input
+            type="number"
+            class="form-control"
+            formControlName="inStorage"
+            placeholder="Existencias del producto"
+          />
+
+          <span *ngIf="isValidField('inStorage')" class="form-text text-danger">
+            {{ getFieldError("inStorage") }}
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-primary float-end">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+// here we can see the vlidations of the form
+<div class="row">
+  <div class="col">
+    <span>Valid</span>
+    <!-- valid significa que todos los controles pasaron las validaciones -->
+    <pre>{{ basicForm.valid | json }}</pre>
+
+    <span>Pristine</span>
+    <!-- los campos del formulario no han sido tocado ni manipulado de ninguna forma -->
+    <pre>{{ basicForm.pristine | json }}</pre>
+
+    <span>Touched</span>
+    <!-- el formulario fue tocado de alguna manera -->
+    <pre>{{ basicForm.touched | json }}</pre>
+
+    <span>Value</span>
+    <!-- el valor de los campos del formulario -->
+    <pre>{{ basicForm.value | json }}</pre>
+
+    <span>Precio</span>
+    <!-- el valor del campo price -->
+    <pre>{{ basicForm.controls["price"].value | json }}</pre>
+
+    <span>Precio - Error</span>
+    <!-- el error del campo price -->
+    <pre>{{ basicForm.controls["price"].errors | json }}</pre>
+
+    <span>Producto</span>
+    <!-- el valor del campo name -->
+    <pre>{{ basicForm.controls["name"].value | json }}</pre>
+
+    <span>Producto - Error</span>
+    <!-- el error del campo name -->
+    <pre>{{ basicForm.controls["name"].errors | json }}</pre>
+  </div>
+</div>
